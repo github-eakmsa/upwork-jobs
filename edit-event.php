@@ -14,7 +14,7 @@ $capi = new GoogleCalendarApi();
 <html>
 <head>
   <title>
-    Add Calendar Event
+    Edit Calendar Event
   </title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.1.9/jquery.datetimepicker.min.css" />
@@ -28,22 +28,22 @@ $capi = new GoogleCalendarApi();
   <h1>Google Caldendar Events</h1>
 </div>
 <a href="index.php">Back</a>
+<?php
+if (isset($_GET['event'])) {
+	?>
 <!-- add event form -->
 <div>
-  <b>Add Event</b>
+  <b>Edit Event</b>
 </div>
-
 <div>
 <!-- <form action="" method="post"> -->
 <select class="" id="calendar" name="" required>
+<option value="<?php echo $_GET['calendar']; ?>" hidden>
+	<?php echo $_GET['calendar']; ?>
+</option>
 	<?php
 	$calendarsList = $capi -> GetCalendarsList($_SESSION['access_token']);
 	if (!empty($calendarsList)) {
-	  ?>
-	  <option value="" hidden>
-			Select Calendar
-		</option>
-	  <?php
 	  foreach ($calendarsList as $calendarObj) {
 	  ?>
 	  <option value="<?php echo $calendarObj['id']; ?>">
@@ -61,18 +61,19 @@ $capi = new GoogleCalendarApi();
 	?>
 </select>
 <br>
-	<input type="text" id="event-title" placeholder="Event Title" autocomplete="off" />
+<input type="text" id="event-id" value="<?php echo $_GET['event']; ?>" hidden />
+	<input type="text" id="event-title" value="<?php echo $_GET['summary']; ?>" placeholder="Event Title" autocomplete="off" />
   <br>
 	<select id="event-type"  autocomplete="off">
 		<option value="FIXED-TIME">Fixed Time Event</option>
 		<option value="ALL-DAY">All Day Event</option>
 	</select>
   <br>
-	<input type="text" id="event-start-time" placeholder="Event Start Time" autocomplete="off" />
-	<input type="text" id="event-end-time" placeholder="Event End Time" autocomplete="off" />
-	<input type="text" id="event-date" placeholder="Event Date" autocomplete="off" />
+	<input type="text" id="event-start-time" value="<?php echo $_GET['start_time']; ?>" placeholder="Event Start Time" autocomplete="off" />
+	<input type="text" id="event-end-time" value="<?php echo $_GET['end_time']; ?>" placeholder="Event End Time" autocomplete="off" />
+	<input type="text" id="event-date" value="<?php echo $_GET['start_time']; ?>" placeholder="Event Date" autocomplete="off" />
   <br>
-	<button id="create-event">Create Event</button>
+	<button id="create-event">Update Event</button>
 <!-- </form> -->
 </div>
 
@@ -164,9 +165,10 @@ $("#create-event").on('click', function(e) {
 						event_date: $("#event-type").val() == 'ALL-DAY' ? $("#event-date").val() : null
 					},
 					all_day: $("#event-type").val() == 'ALL-DAY' ? 1 : 0,
-					operation: 'create',
+					operation: 'update',
+					event_id: $("#event-id").val(),
 				};
-calendarId = $("#calendar").val();
+	calendarId = $("#calendar").val();
 	$("#create-event").attr('disabled', 'disabled');
 	$.ajax({
         type: 'POST',
@@ -175,7 +177,7 @@ calendarId = $("#calendar").val();
         dataType: 'json',
         success: function(response) {
         	$("#create-event").removeAttr('disabled');
-        	alert('Event created with ID : ' + response.event_id);
+        		alert('Event ID ' + parameters.event_id + ' updated');
         },
         error: function(response) {
             $("#create-event").removeAttr('disabled');
@@ -186,5 +188,13 @@ calendarId = $("#calendar").val();
 
 </script>
 
+<?php
+}
+else {
+	?>
+<p>No event found</p>
+	<?php
+}
+?>
 </body>
 </html>
