@@ -1,12 +1,12 @@
 <?php
 
 /* Google App Client Id */
-define('CLIENT_ID', '23241908110-gjvbajq81sc52hu8lodbk1g6j0ulgnvh.apps.googleusercontent.com');
+define('CLIENT_ID', 'xxxxxxxxxxxxxxxxx');
 
 /* Google App Client Secret */
-define('CLIENT_SECRET', 'TEYgTCpyJlPYJxpMb9JcOmaV');
+define('CLIENT_SECRET', 'xxxxxxxxxxxxxxxxx');
 
 /* Google App Redirect Url */
-define('CLIENT_REDIRECT_URL', 'http://localhost/upwork-jobs/google-cal-api/google-login.php');
+define('CLIENT_REDIRECT_URL', 'xxxxxxxxxxxxxxxxxxxxxxxxxx');
 
 ?>
